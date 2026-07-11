@@ -1,5 +1,5 @@
 <b:includable id='commentPicker' var='post'>
-  <section class='cm comments-shell rounded-theme border border-border bg-surface/50 p-4 md:p-6'>
+  <section class='cm comments-shell'>
     <b:if cond='data:post.allowComments and data:view.isPost and !data:view.isPreview'>
       <b:include data='post' name='commentTitleBar'/>
       <b:include data='post' name='commentContentArea'/>

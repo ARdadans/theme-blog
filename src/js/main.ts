@@ -81,9 +81,11 @@ function cleanCommentAuthorText() {
     Array.from(author.childNodes).forEach((node) => {
       if (node.nodeType === Node.TEXT_NODE) {
         const value = node.textContent || '';
-        if (/mengatakan|says|said/i.test(value)) {
-          node.textContent = value.replace(/\s*(mengatakan|says|said)\s*/i, '');
-        }
+        const cleaned = value
+          .replace(/\s*(mengatakan|says|said)\s*/i, '')
+          .replace(/[.…]+/g, '')
+          .trim();
+        node.textContent = cleaned;
       }
     });
     author.normalize();
@@ -95,16 +97,26 @@ function setupCommentActions() {
   if (!commentRoot) return;
 
   commentRoot.querySelectorAll('.comment').forEach((comment) => {
-    const footer = comment.querySelector('.comment-footer');
     const author = comment.querySelector('.comment-author');
+    const body = comment.querySelector('.comment-body');
 
-    if (!footer || !author || author.querySelector('.comment-meta-row')) return;
+    if (!author || !body || comment.querySelector('.comment-meta-row')) return;
 
-    const deleteLink = footer.querySelector('a.comment-delete');
-    const replyLink = footer.querySelector('a.comment-reply');
-    const timestamp = footer.querySelector('.comment-timestamp');
+    const footer = comment.querySelector('.comment-footer') || comment;
+    const deleteLink = footer.querySelector('a.comment-delete') || comment.querySelector('a.comment-delete');
+    const existingReply = (footer.querySelector('a.comment-reply, a[href*="comment/reply"]') || comment.querySelector('a.comment-reply, a[href*="comment/reply"]')) as HTMLAnchorElement | null;
+    const timestamp = footer.querySelector('.comment-timestamp') || comment.querySelector('.comment-timestamp');
 
     if (!timestamp) return;
+
+    let replyUrl = '';
+    if (deleteLink && deleteLink.getAttribute('href')) {
+      const deleteHref = deleteLink.getAttribute('href') || '';
+      const replyHref = deleteHref.replace(/\/comment\/delete\//i, '/comment/reply/');
+      if (replyHref && replyHref !== deleteHref) {
+        replyUrl = replyHref.startsWith('http') ? replyHref : `https://www.blogger.com${replyHref}`;
+      }
+    }
 
     const metaRow = document.createElement('div');
     metaRow.className = 'comment-meta-row';
@@ -125,13 +137,30 @@ function setupCommentActions() {
     const actionsWrap = document.createElement('div');
     actionsWrap.className = 'comment-actions-inline';
 
-    if (replyLink) {
-      replyLink.classList.add('comment-reply');
-      actionsWrap.appendChild(replyLink);
+    const replyLink = existingReply || document.createElement('a');
+    replyLink.className = 'comment-reply';
+
+    if (!existingReply) {
+      replyLink.setAttribute('href', replyUrl || '#');
+      replyLink.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 10 5 5-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></svg><span>Reply</span>';
+    }
+
+    if (!body.querySelector('.comment-reply')) {
+      const replyWrap = document.createElement('div');
+      replyWrap.className = 'comment-reply-row';
+
+      if (replyLink.parentNode && replyLink.parentNode !== replyWrap) {
+        replyLink.parentNode.removeChild(replyLink);
+      }
+
+      replyWrap.appendChild(replyLink);
+      body.appendChild(replyWrap);
     }
 
     if (deleteLink) {
+      deleteLink.textContent = 'Delete';
       deleteLink.classList.add('comment-delete');
+      deleteLink.querySelector('img')?.remove();
 
       const menuBtn = document.createElement('button');
       menuBtn.type = 'button';
@@ -156,10 +185,7 @@ function setupCommentActions() {
     metaRow.appendChild(authorWrap);
     metaRow.appendChild(actionsWrap);
 
-    const commentBlock = footer.parentElement;
-    if (commentBlock) {
-      commentBlock.replaceChild(metaRow, footer);
-    }
+    body.parentNode?.insertBefore(metaRow, body);
   });
 }
 

@@ -214,7 +214,7 @@
 
 /* Blogger comments styling */
 .comments-shell {
-  @apply text-sm text-text-soft;
+  @apply p-0 text-sm text-text-soft;
 }
 
 .comments-shell .cm {
@@ -222,7 +222,7 @@
 }
 
 .comments-shell .cmTtl {
-  @apply mb-4 border-b border-border pb-4;
+  @apply mb-4 border-b border-border/70 pb-3;
 }
 
 .comments-shell .comments .title {
@@ -231,27 +231,31 @@
 }
 
 .comments-shell .cmCo {
-  @apply flex flex-col gap-4;
+  @apply flex flex-col gap-0;
 }
 
 .comments-shell .cmCn {
-  @apply flex flex-col gap-3;
+  @apply flex flex-col gap-0;
 }
 
 .comments-shell .cmFrm {
-  @apply rounded-2xl border border-border/70 bg-bg/40 p-4;
+  @apply mt-4 p-0;
 }
 
 .comments-shell #comments-block {
-  @apply flex flex-col gap-3;
+  @apply flex flex-col gap-0;
 }
 
 .comments-shell .comment {
-  @apply flex gap-3 rounded-2xl border border-border/80 bg-card/70 p-4 shadow-sm;
+  @apply flex gap-3 py-4;
+}
+
+.comments-shell .comment.reply {
+  @apply ml-10;
 }
 
 .comments-shell .avatar-image-container {
-  @apply mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border/80 bg-primary/10;
+  @apply mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border/60 bg-primary/10;
 }
 
 .comments-shell .author-avatar {
@@ -262,17 +266,20 @@
   @apply min-w-0 flex-1;
 }
 
+.comments-shell .comment-meta-row {
+  @apply mb-2 flex items-center justify-between gap-3;
+}
+
+.comments-shell .comment-author-wrap {
+  @apply flex flex-1 items-center gap-3 text-sm font-semibold text-text-soft;
+}
+
 .comments-shell .comment-author {
-  @apply mb-2 text-sm font-semibold text-text-soft;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  flex-wrap: wrap;
+  @apply m-0 flex flex-wrap items-center gap-1.5 text-sm font-semibold text-text-soft;
 }
 
 .comments-shell .comment-author a {
   @apply text-text-soft hover:text-primary;
-  display: inline-flex;
   font-weight: 600;
 }
 
@@ -281,28 +288,12 @@
   @apply hidden;
 }
 
-.comments-shell .comment-author .comment-author-text {
-  @apply hidden;
-}
-
 .comments-shell .comment-body {
-  @apply rounded-xl border border-border/70 bg-bg/70 px-3.5 py-3 leading-7 text-text-soft shadow-inner;
+  @apply leading-7 text-text-soft;
 }
 
 .comments-shell .comment-body p {
   @apply mb-3 last:mb-0;
-}
-
-.comments-shell .comment-meta-row {
-  @apply mt-3 flex items-center justify-between gap-3;
-}
-
-.comments-shell .comment-author-wrap {
-  @apply flex flex-1 flex-wrap items-center gap-2 text-sm font-semibold text-text-soft;
-}
-
-.comments-shell .comment-author {
-  @apply flex flex-wrap items-center gap-1.5 text-sm font-semibold text-text-soft;
 }
 
 .comments-shell .comment-timestamp,
@@ -319,15 +310,19 @@
 }
 
 .comments-shell .comment-reply {
-  @apply inline-flex items-center rounded-full border border-border bg-bg px-2.5 py-1 text-[11px] font-semibold text-muted transition-fast hover:border-primary hover:text-primary;
+  @apply inline-flex items-center gap-1 text-[13px] text-muted transition-fast hover:text-primary;
+}
+
+.comments-shell .comment-reply-row {
+  @apply mt-2;
 }
 
 .comments-shell .comment-menu-toggle {
-  @apply inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-bg text-sm text-muted transition-fast hover:border-primary hover:text-primary;
+  @apply inline-flex h-8 w-8 items-center justify-center rounded-full bg-transparent text-sm text-muted transition-fast hover:bg-primary/10 hover:text-primary;
 }
 
 .comments-shell .comment-menu {
-  @apply absolute right-0 top-full z-10 mt-2 min-w-[140px] rounded-xl border border-border bg-card p-2 shadow-lg;
+  @apply absolute right-0 top-full z-10 mt-2 min-w-[120px] rounded-xl border border-border bg-card p-2 shadow-lg;
 }
 
 .comments-shell .comment-menu.hidden {
