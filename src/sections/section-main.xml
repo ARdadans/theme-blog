@@ -1,0 +1,99 @@
+<b:section id='main-section' name='Main Posts' maxwidgets='1' showaddelement='no'>
+  <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog' version='2' visible='true'>
+    
+    <b:includable id='main' var='this'>
+      <b:if cond='data:view.isMultipleItems'>
+        <!-- Index / Archive Page -->
+        <div class='flex justify-between items-center mb-6'>
+          <h2 class='text-base font-bold capitalize tracking-[0.5px] text-text'>
+            <b:if cond='data:view.isLabelSearch'>
+              Genre: <data:view.search.label/>
+            <b:elseif cond='data:view.search.query'/>
+              Search Results for: &quot;<data:view.search.query/>&quot;
+            <b:else/>
+              Latest Updates
+            </b:if>
+          </h2>
+        </div>
+        
+        <b:if cond='data:view.isHomepage'>
+          <!-- Homepage Dynamic Series Grid with Modern Pulse Skeleton (fits 5 columns) -->
+          <div class='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-[35px]' id='homepage-series-list' expr:data-posts-per-page='data:posts.length'>
+            <!-- 5 Skeleton Cards (Dynamically generated via Blogger loop) -->
+            <b:loop index='i' values='data:posts' var='post'>
+              <b:if cond='data:i &lt; 5'>
+                <div class='flex flex-col gap-2 w-full animate-pulse skeleton-card'>
+                  <div class='aspect-[2/3] bg-surface border border-border rounded w-full'></div>
+                  <div class='h-2.5 bg-surface rounded w-2/3 mt-2'></div>
+                  <div class='h-3 bg-surface rounded w-full mt-1.5'></div>
+                </div>
+              </b:if>
+            </b:loop>
+          </div>
+          <!-- Client-side Homepage Pagination -->
+          <div id='homepage-pagination' class='flex justify-center gap-4 mt-6 hidden'>
+            <button id='homepage-prev-btn' class='bg-surface border border-border hover:border-primary hover:text-primary font-semibold px-4 py-2 rounded-theme text-xs transition-fast disabled:opacity-50 disabled:pointer-events-none flex items-center gap-1.5' disabled='disabled'>
+              <icon:chevron-left class='w-3.5 h-3.5' /> Previous
+            </button>
+            <button id='homepage-next-btn' class='bg-surface border border-border hover:border-primary hover:text-primary font-semibold px-4 py-2 rounded-theme text-xs transition-fast disabled:opacity-50 disabled:pointer-events-none flex items-center gap-1.5' disabled='disabled'>
+              Next <icon:chevron-right class='w-3.5 h-3.5' />
+            </button>
+          </div>
+
+          <!-- Page-Specific Homepage Scripts -->
+          <script type='text/javascript'>
+            //<![CDATA[
+            /* [HOMEPAGE_JS_INJECT] */
+            //]]>
+          </script>
+        <b:else/>
+          <!-- Search / Archive List -->
+          <div class='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-[35px]'>
+            <b:loop values='data:posts' var='post'>
+              <b:if cond='data:post.labels any (l =&gt; l.name == &quot;type:series&quot; or l.name == &quot;type: series&quot; or l.name == &quot;Series&quot; or l.name == &quot;Type:Series&quot;)'>
+                <b:include name='seriesCard' data='post'/>
+              </b:if>
+            </b:loop>
+          </div>
+          <!-- Pagination -->
+          <b:include name='pagination' data='this'/>
+        </b:if>
+      <b:else/>
+        <!-- Single Post / Page View Router -->
+        <b:loop values='data:posts' var='post'>
+          <b:if cond='data:post.labels any (l =&gt; l.name == &quot;type:series&quot; or l.name == &quot;type: series&quot; or l.name == &quot;Series&quot; or l.name == &quot;Type:Series&quot;)'>
+            <!-- Labeled type:series -->
+            <b:include name='seriesPagePost' data='post'/>
+          <b:else/>
+            <b:if cond='data:post.labels any (l =&gt; l.name == &quot;media:novel&quot; or l.name == &quot;media: novel&quot;) and data:post.labels any (l =&gt; l.name == &quot;type:chapter&quot; or l.name == &quot;type: chapter&quot;)'>
+              <!-- Labeled both media:novel AND type:chapter -->
+              <b:include name='novelChapterPost' data='post'/>
+            <b:else/>
+              <!-- Normal Single Post Fallback -->
+              <b:include name='normalPost' data='post'/>
+            </b:if>
+          </b:if>
+        </b:loop>
+      </b:if>
+    </b:includable>
+
+    <!-- Includable for Series Card (Index Page Items) -->
+    <src:include src="../includes/series-card.xml" />
+
+    <!-- Includable for Series Page Details (type:series) -->
+    <src:include src="../includes/single-page/series-page-post.xml" />
+
+    <!-- Includable for Novel Chapter Reader (media:novel + type:chapter) -->
+    <src:include src="../includes/single-page/novel-chapter-post.xml" />
+
+    <!-- Includable for Normal Blog Posts (fallback) -->
+    <src:include src="../includes/single-page/normal-post.xml" />
+
+    <!-- Includable for Comments System -->
+    <src:include src="../includes/comment-picker.xml" />
+
+    <!-- Includable for Pagination -->
+    <src:include src="../includes/pagination.xml" />
+    
+  </b:widget>
+</b:section>

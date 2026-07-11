@@ -1,0 +1,16 @@
+<b:includable id='pagination' var='this'>
+  <b:if cond='data:this.newerPageUrl or data:this.olderPageUrl'>
+    <div class='flex justify-center gap-[15px] mt-[30px] mb-5'>
+      <b:if cond='data:this.newerPageUrl'>
+        <a class='bg-card border border-border text-text py-3 px-6 rounded-theme font-semibold text-sm flex items-center gap-2 shadow-card hover:border-transparent hover:bg-primary/10 hover:text-primary transition-fast' expr:href='data:this.newerPageUrl'>
+          <icon:chevron-left class='w-[18px] h-[18px]' /> Previous
+        </a>
+      </b:if>
+      <b:if cond='data:this.olderPageUrl'>
+        <a class='bg-card border border-border text-text py-3 px-6 rounded-theme font-semibold text-sm flex items-center gap-2 shadow-card hover:border-transparent hover:bg-primary/10 hover:text-primary transition-fast' expr:href='data:this.olderPageUrl'>
+          Next <icon:chevron-right class='w-[18px] h-[18px]' />
+        </a>
+      </b:if>
+    </div>
+  </b:if>
+</b:includable>

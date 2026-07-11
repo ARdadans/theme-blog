@@ -1,0 +1,3 @@
+<b:includable id='commentPicker' var='post'>
+  <b:include data='post' name='comments'/>
+</b:includable>

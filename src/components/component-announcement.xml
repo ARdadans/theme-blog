@@ -1,0 +1,21 @@
+<b:section id='announcement-section' name='Announcement Widget' showaddelement='yes' allowedwidgets='HTML'>
+  <b:widget id='HTML101' locked='false' title='Announcement' type='HTML' version='2' visible='true'>
+    <b:includable id='main'>
+      <b:if cond='data:view.isHomepage'>
+        <div class='max-w-theme mx-auto px-5 md:px-8 lg:px-12 w-full mt-6 mb-1.5'>
+          <div class='bg-gradient-to-br from-surface via-surface to-card border border-border rounded-theme p-6 md:p-8 flex flex-col justify-center min-h-[180px] md:min-h-[220px] shadow-card relative overflow-hidden'>
+            <!-- Subtle ambient highlight -->
+            <div class='absolute -right-10 -top-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl pointer-events-none'></div>
+            
+            <div class='announcement-content relative z-10 max-w-3xl flex flex-col justify-center items-start gap-2.5'>
+              <h2 class='text-lg md:text-xl text-text font-extrabold tracking-tight'><data:title/></h2>
+              <div class='text-sm leading-relaxed text-text-soft line-clamp-3 md:line-clamp-4'>
+                <data:content/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </b:if>
+    </b:includable>
+  </b:widget>
+</b:section>

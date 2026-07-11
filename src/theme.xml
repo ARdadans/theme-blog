@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html b:css='false' b:defaultmessages='true' b:layoutsVersion='3' b:responsive='true' lang='en' xmlns='http://www.w3.org/1999/xhtml' xmlns:b='http://www.google.com/2010/xslt' xmlns:expr='http://www.google.com/2010/xslt/expr' xmlns:data='http://www.google.com/2010/xslt/data'>
+<head>
+  <meta charset='UTF-8'/>
+  <meta content='width=device-width, initial-scale=1' name='viewport'/>
+  
+  <title>
+    <b:if cond='data:view.isHomepage'>
+      <data:blog.title/> - Latest Manga Updates
+    <b:else/>
+      <data:blog.pageName/> - <data:blog.title/>
+    </b:if>
+  </title>
+
+  <!-- SEO Meta Tags -->
+  <src:include src="includes/seo-meta.xml" />
+  
+  <!-- Font & Icons -->
+  <src:include src="includes/fonts-icons.xml" />
+
+  <b:skin><![CDATA[
+  /* [CSS_INJECT] */
+  ]]></b:skin>
+
+  <!-- Conditional Stylesheet for Series Pages -->
+  <b:if cond='data:view.isPost and data:post.labels any (l =&gt; l.name == &quot;type:series&quot; or l.name == &quot;type: series&quot; or l.name == &quot;Series&quot; or l.name == &quot;Type:Series&quot;)'>
+    <style>
+      <src:include src="css/series-page.css" />
+    </style>
+  </b:if>
+</head>
+
+<body>
+  <!-- Navigation Header Bar -->
+  <src:include src="components/component-header.xml" />
+
+  <!-- Announcement HTML Widget Section -->
+  <src:include src="components/component-announcement.xml" />
+
+  <!-- Main Body Wrapper -->
+  <div class='max-w-theme mx-auto px-5 md:px-8 lg:px-12 w-full mt-5 mb-12 block'>
+    <!-- Bookmarks list display -->
+    <src:include src="components/component-bookmarks.xml" />
+
+    <div class='grid grid-cols-1 lg:grid-cols-10 gap-6 lg:gap-8 items-start'>
+      <!-- Main Content Column - 70% width on Homepage, Full Width on Single Pages -->
+      <div expr:class='data:view.isHomepage ? "lg:col-span-7" : "lg:col-span-10"'>
+        <!-- Main Posts section -->
+        <src:include src="sections/section-main.xml" />
+      </div>
+
+      <!-- Right Column (Sidebar/Popular Widget) - Only on Homepage -->
+      <b:if cond='data:view.isHomepage'>
+        <aside class='lg:col-span-3'>
+          <src:include src="sections/section-popular-series.xml" />
+        </aside>
+      </b:if>
+    </div>
+  </div>
+
+  <!-- Page Footer -->
+  <src:include src="components/component-footer.xml" />
+
+  <!-- Theme Functionality Scripts -->
+  <!-- Global Scripts (Load everywhere) -->
+  <script type='text/javascript'>
+    //<![CDATA[
+    /* [GLOBAL_JS_INJECT] */
+    //]]>
+  </script>
+
+</body>
+</html>

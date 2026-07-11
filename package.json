@@ -1,0 +1,24 @@
+{
+  "name": "blogger-novel-theme",
+  "version": "1.0.0",
+  "description": "Modern Blogger Theme Framework for Manga/Novel Sites",
+  "main": "dist/theme.xml",
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "autoprefixer": "^10.5.2",
+    "fast-xml-parser": "^5.9.3",
+    "lucide-static": "^1.24.0",
+    "postcss": "^8.5.16",
+    "tailwindcss": "^4.3.2",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.4"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.3.2"
+  }
+}

@@ -1,0 +1,41 @@
+<b:includable id='seriesCard' var='post'>
+  <div class='group flex flex-col transition-normal overflow-hidden w-full'>
+    
+    <!-- Cover Image Container (2:3 Aspect Ratio) -->
+    <a class='block relative aspect-[2/3] overflow-hidden rounded bg-surface mb-2 flex-shrink-0' expr:href='data:post.url'>
+      <b:if cond='data:post.featuredImage'>
+        <img class='w-full h-full object-cover transition-normal' expr:alt='data:post.title' expr:src='data:post.featuredImage' loading='lazy'/>
+      <b:elseif cond='data:post.thumbnailUrl'/>
+        <img class='w-full h-full object-cover transition-normal' expr:alt='data:post.title' expr:src='data:post.thumbnailUrl' loading='lazy'/>
+      <b:else/>
+        <div class='w-full h-full flex items-center justify-center bg-gradient-to-br from-surface to-card p-2 text-center'>
+          <span class='text-[10px] font-bold text-muted'><data:post.title/></span>
+        </div>
+      </b:if>
+      
+      <!-- Floating Badge NEW -->
+      <b:loop values='data:post.labels' var='label'>
+        <b:if cond='data:label.name == &quot;New&quot;'>
+          <span class='absolute top-1.5 left-1.5 bg-primary text-bg text-[8px] font-black px-1.5 py-0.5 rounded shadow-[0_2px_4px_rgba(0,0,0,0.5)] uppercase tracking-[0.5px] pointer-events-none z-[2]'>New</span>
+        </b:if>
+      </b:loop>
+    </a>
+
+    <!-- Meta Info Row (Below thumbnail, before title) -->
+    <div class='flex justify-between items-center text-[10px] text-muted mt-1.5 mb-1 font-semibold font-sans'>
+      <!-- Chapter Update -->
+      <div class='truncate max-w-[65%]'>
+      </div>
+      <!-- Relative Time -->
+      <div class='flex items-center gap-1 text-muted flex-shrink-0'>
+        <time class='timeago' expr:datetime='data:post.date.iso8601'><data:post.date.escaped/></time>
+      </div>
+    </div>
+
+    <!-- Title Area -->
+    <h3 class='text-xs md:text-sm font-semibold leading-snug line-clamp-2 text-text group-hover:text-primary transition-fast'>
+      <a expr:href='data:post.url'><data:post.title/></a>
+    </h3>
+    
+  </div>
+</b:includable>

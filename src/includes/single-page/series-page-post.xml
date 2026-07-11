@@ -1,0 +1,137 @@
+<b:includable id='seriesPagePost' var='post'>
+  <article class='md:px-24 md:py-16 mb-[30px] series-profile-container'>
+    
+    <div class='flex flex-col md:flex-row gap-6 md:gap-8 items-start'>
+      
+      <!-- Left Column: Poster Cover Image -->
+      <div class='w-full md:w-[240px] flex-shrink-0 flex justify-center md:block'>
+        <div class='series-cover-placeholder w-[200px] md:w-[240px] aspect-[2/3] bg-surface rounded-theme overflow-hidden relative animate-pulse'>
+          <div class='w-full h-full bg-card/20 flex items-center justify-center text-muted text-[10px] font-bold font-sans'>Loading Cover...</div>
+        </div>
+      </div>
+      
+      <!-- Right Column: Details Info -->
+      <div class='flex-grow min-w-0 w-full flex flex-col gap-4'>
+        
+        <!-- Title and Alternative Title -->
+        <div class='series-title-placeholder'>
+          <h1 class='text-xl md:text-2xl font-extrabold leading-tight text-text mb-1.5'><data:post.title/></h1>
+          <!-- JS will move ul.title-alts here -->
+        </div>
+
+        <!-- Author & Artist Placeholder (Separated, under Alt Title) -->
+        <div class='series-author-art-placeholder text-xs flex flex-wrap gap-x-4 gap-y-1 -mt-4'>
+        </div>
+
+        <!-- Badges Row (Media, Status, Year, Badge, Rating) -->
+        <div class='series-badges-placeholder flex flex-wrap gap-2 items-center text-xs animate-pulse'>
+          <div class='h-6 w-14 bg-surface rounded'></div>
+          <div class='h-6 w-16 bg-surface rounded'></div>
+          <div class='h-6 w-12 bg-surface rounded'></div>
+        </div>
+
+        <!-- Genres & Tags Row (Desktop only) -->
+        <div class='series-genres-placeholder hidden md:flex flex-col gap-2.5 animate-pulse'>
+          <div class='h-7 w-16 bg-surface rounded'></div>
+          <div class='h-7 w-20 bg-surface rounded'></div>
+          <div class='h-7 w-24 bg-surface rounded'></div>
+        </div>
+
+        <!-- Synopsis (Summary) -->
+        <div class='series-summary-placeholder text-sm leading-relaxed text-text-soft mt-1 relative animate-pulse'>
+          <div class='h-4 bg-surface rounded w-full mb-2'></div>
+          <div class='h-4 bg-surface rounded w-full mb-2'></div>
+          <div class='h-4 bg-surface rounded w-2/3'></div>
+        </div>
+
+        <!-- Action & Bookmark Buttons Row -->
+        <div class='flex flex-wrap items-center gap-3 mt-4'>
+          <!-- Start Reading Button -->
+          <a class='bg-primary text-bg hover:text-text font-bold py-2.5 px-5 rounded-theme text-xs md:text-sm flex items-center gap-2 transition-fast cursor-pointer' id='start-reading-btn' href='#chapters-section'>
+            <icon:play class='w-4 h-4 fill-current' /> Start Reading
+          </a>
+          
+          <button class='bg-surface border border-border rounded-theme text-text py-2.5 px-4 text-xs md:text-sm font-semibold cursor-pointer flex items-center gap-2 hover:border-transparent hover:bg-primary/10 hover:text-primary transition-fast bookmark-toggle-btn' id='bookmark-btn' expr:data-id='data:post.id' expr:data-image='data:post.featuredImage ? data:post.featuredImage : &quot;&quot;' expr:data-title='data:post.title' expr:data-url='data:post.url'>
+            <icon:bookmark class='w-4 h-4 icon-bookmark-add' />
+            <icon:bookmark class='w-4 h-4 icon-bookmark-remove fill-current' style='display:none;' />
+            <span class='btn-text'>Add to Bookmarks</span>
+          </button>
+        </div>
+
+        <!-- Share Buttons Row -->
+        <div class='flex items-center gap-2.5 text-xs text-muted mt-2'>
+          <span>SHARE</span>
+          <div class='flex items-center gap-1.5'>
+            <!-- X / Twitter -->
+            <a class='share-btn w-8 h-8' expr:href='&quot;https://twitter.com/intent/tweet?url=&quot; + data:post.url.canonical + &quot;&amp;text=&quot; + data:post.title' target='_blank' title='Share on X'>
+              <icon:twitter class='w-3.5 h-3.5' />
+            </a>
+            <!-- Facebook -->
+            <a class='share-btn w-8 h-8' expr:href='&quot;https://www.facebook.com/sharer/sharer.php?u=&quot; + data:post.url.canonical' target='_blank' title='Share on Facebook'>
+              <icon:facebook class='w-3.5 h-3.5' />
+            </a>
+            <!-- WhatsApp -->
+            <a class='share-btn w-8 h-8' expr:href='&quot;https://api.whatsapp.com/send?text=&quot; + data:post.title + &quot;%20&quot; + data:post.url.canonical' target='_blank' title='Share on WhatsApp'>
+              <icon:message-circle class='w-3.5 h-3.5' />
+            </a>
+            <!-- Telegram -->
+            <a class='share-btn w-8 h-8' expr:href='&quot;https://t.me/share/url?url=&quot; + data:post.url.canonical + &quot;&amp;text=&quot; + data:post.title' target='_blank' title='Share on Telegram'>
+              <icon:send class='w-3.5 h-3.5' />
+            </a>
+            <!-- Copy Link -->
+            <button class='share-btn w-8 h-8' id='share-copy-btn' title='Copy Link'>
+              <icon:copy class='w-3.5 h-3.5' />
+            </button>
+            <!-- Native Share -->
+            <button class='share-btn w-8 h-8' id='share-native-btn' title='Share'>
+              <icon:share-2 class='w-3.5 h-3.5' />
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Hidden Raw Metadata Source & Custom Post Body Content -->
+    <div class='meta hidden'>
+      <data:post.body/>
+    </div>
+
+    <!-- Hidden metadata helper for labels parsing -->
+    <div class='hidden' id='series-page-metadata'>
+      <b:if cond='data:post.labels'>
+        <b:loop values='data:post.labels' var='label'>
+          <span class='label-item'><data:label.name/></span>
+        </b:loop>
+      </b:if>
+    </div>
+
+    <!-- Chapter List Section Placeholder (automatic feed loading will render here) -->
+    <div class='mt-8' id='chapters-section'>
+      <div class='flex items-center justify-between mb-4'>
+        <h3 class='text-base text-text font-bold'>Chapters</h3>
+      </div>
+      <div class='bg-surface rounded-b-theme overflow-hidden' id='chapters-list-container'>
+        <div class='text-center text-muted text-xs py-8 font-sans'>Loading chapters...</div>
+      </div>
+      <!-- Chapters Pagination -->
+      <div class='flex justify-center gap-2 mt-6 hidden' id='chapters-pagination'>
+        <!-- Dynamic pagination buttons -->
+      </div>
+    </div>
+
+    <!-- Discussion Comments Area -->
+    <div class='mt-10 border-t border-border pt-8'>
+      <h3 class='text-base uppercase tracking-[0.5px] text-text mb-4 font-bold'>Discussion</h3>
+      <b:include name='commentPicker' data='post'/>
+    </div>
+
+    <!-- Page-Specific Series Scripts -->
+    <script type='text/javascript'>
+      //<![CDATA[
+      /* [SERIES_JS_INJECT] */
+      //]]>
+    </script>
+  </article>
+</b:includable>

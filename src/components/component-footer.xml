@@ -1,0 +1,31 @@
+<footer class='bg-surface border-t border-border py-12 px-0 mt-10'>
+  <div class='grid grid-cols-1 md:grid-cols-3 gap-10 mb-10 max-w-theme mx-auto px-5 md:px-8 lg:px-12 w-full'>
+    <div class='flex flex-col gap-[15px]'>
+      <span class='text-2xl font-extrabold text-text tracking-[-0.5px]'>MangaPro</span>
+      <p class='text-xs leading-relaxed max-w-[350px] text-text-soft'>Your ultimate destination for checking high-quality manga updates. Read chapter updates daily and track your bookmarks seamlessly.</p>
+    </div>
+    <div class='flex flex-col gap-3'>
+      <h4 class='text-xs capitalize tracking-[0.5px] mb-5 text-text font-semibold'>Quick Links</h4>
+      <ul class='list-none flex flex-col gap-2.5 text-xs'>
+        <li><a class='text-text-soft hover:text-primary transition-fast' expr:href='data:blog.homepageUrl'>Home</a></li>
+        <li><a class='text-text-soft hover:text-primary transition-fast' href='/search/label/Manga'>Manga Catalog</a></li>
+        <li><a class='text-text-soft hover:text-primary transition-fast' href='/search/label/Latest'>Latest Updates</a></li>
+        <li><a class='text-text-soft hover:text-primary transition-fast' href='https://discord.gg' target='_blank'>Support Discord</a></li>
+      </ul>
+    </div>
+    <div class='flex flex-col gap-3'>
+      <h4 class='text-xs capitalize tracking-[0.5px] mb-5 text-text font-semibold'>Follow Us</h4>
+      <div class='flex gap-2.5'>
+        <a class='w-[38px] h-[38px] rounded-theme bg-card border border-border flex items-center justify-center text-text-soft hover:bg-primary hover:text-bg hover:border-primary hover:-translate-y-[3px] transition-fast' href='https://facebook.com' target='_blank' aria-label='Facebook'>
+          <icon:facebook class='w-[18px] h-[18px]' />
+        </a>
+        <a class='w-[38px] h-[38px] rounded-theme bg-card border border-border flex items-center justify-center text-text-soft hover:bg-primary hover:text-bg hover:border-primary hover:-translate-y-[3px] transition-fast' href='https://twitter.com' target='_blank' aria-label='Twitter'>
+          <icon:twitter class='w-[18px] h-[18px]' />
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class='border-t border-border pt-5 text-center text-xs text-muted max-w-theme mx-auto px-5 md:px-8 lg:px-12 w-full'>
+    <p>&amp;copy; 2026 MangaPro. Designed for Manga Lovers. Powered by Blogger.</p>
+  </div>
+</footer>

@@ -1,0 +1,7 @@
+<b:if cond='data:view.description'>
+  <meta expr:content='data:view.description' name='description'/>
+<b:else/>
+  <meta content='Read the latest manga updates, chapters, and series recommendations online. Follow your favorite manga bookmarks with our fast loading theme.' name='description'/>
+</b:if>
+
+<b:include data='blog' name='all-head-content'/>

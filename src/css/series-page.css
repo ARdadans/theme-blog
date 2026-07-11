@@ -1,0 +1,27 @@
+/* Standard details content view formatting */
+.series-post-body.details-mode {
+  font-size: 1rem;
+  line-height: 1.625;
+  color: var(--text-soft);
+}
+
+.series-post-body.details-mode p {
+  margin-bottom: 15px;
+}
+
+.series-post-body.details-mode img {
+  border-radius: var(--border-radius, 8px);
+  border: 1px solid var(--border-color);
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Series Cover Card hover scale transition */
+.series-cover-placeholder img {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.series-cover-placeholder:hover img {
+  transform: scale(1.04);
+}
