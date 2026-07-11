@@ -1,4 +1,4 @@
-<b:section id='main-section' name='Main Posts' maxwidgets='1' showaddelement='no'>
+<b:section id='main-bar' name='Main Posts' maxwidgets='1' showaddelement='true'>
   <b:widget id='Blog1' locked='true' title='Blog Posts' type='Blog' version='2' visible='true'>
     
     <b:includable id='main' var='this'>

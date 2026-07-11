@@ -36,7 +36,6 @@
 
     <!-- Discussion Comments Area -->
     <div class='mt-10 border-t border-border pt-[30px]'>
-      <h3 class='text-base uppercase tracking-[0.5px] text-text mb-4'>Discussion</h3>
       <b:include name='commentPicker' data='post'/>
     </div>
 

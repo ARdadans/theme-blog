@@ -293,22 +293,29 @@
   @apply mb-3 last:mb-0;
 }
 
-.comments-shell .comment-footer {
-  @apply mt-3 flex items-center justify-between gap-3 text-xs text-muted;
+.comments-shell .comment-meta-row {
+  @apply mt-3 flex items-center justify-between gap-3;
+}
+
+.comments-shell .comment-author-wrap {
+  @apply flex flex-1 flex-wrap items-center gap-2 text-sm font-semibold text-text-soft;
+}
+
+.comments-shell .comment-author {
+  @apply flex flex-wrap items-center gap-1.5 text-sm font-semibold text-text-soft;
 }
 
 .comments-shell .comment-timestamp,
-.comments-shell .comment-footer a {
+.comments-shell .comment-timestamp a {
   @apply text-xs text-muted;
 }
 
-.comments-shell .comment-timestamp a:hover,
-.comments-shell .comment-footer a:hover {
+.comments-shell .comment-timestamp a:hover {
   @apply text-primary;
 }
 
 .comments-shell .comment-actions-inline {
-  @apply flex items-center gap-2;
+  @apply relative flex items-center gap-2;
 }
 
 .comments-shell .comment-reply {
@@ -320,7 +327,7 @@
 }
 
 .comments-shell .comment-menu {
-  @apply absolute right-0 top-full z-10 mt-2 min-w-[120px] rounded-xl border border-border bg-card p-2 shadow-lg;
+  @apply absolute right-0 top-full z-10 mt-2 min-w-[140px] rounded-xl border border-border bg-card p-2 shadow-lg;
 }
 
 .comments-shell .comment-menu.hidden {

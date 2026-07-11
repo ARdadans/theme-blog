@@ -78,10 +78,12 @@ function cleanCommentAuthorText() {
   if (!commentRoot) return;
 
   commentRoot.querySelectorAll('.comment-author').forEach((author) => {
-    const textNodes = Array.from(author.childNodes).filter((node) => node.nodeType === Node.TEXT_NODE);
-    textNodes.forEach((node) => {
-      if (/mengatakan|says|said/i.test(node.textContent || '')) {
-        node.textContent = '';
+    Array.from(author.childNodes).forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const value = node.textContent || '';
+        if (/mengatakan|says|said/i.test(value)) {
+          node.textContent = value.replace(/\s*(mengatakan|says|said)\s*/i, '');
+        }
       }
     });
     author.normalize();
@@ -94,13 +96,31 @@ function setupCommentActions() {
 
   commentRoot.querySelectorAll('.comment').forEach((comment) => {
     const footer = comment.querySelector('.comment-footer');
-    if (!footer || footer.querySelector('.comment-actions-inline')) return;
+    const author = comment.querySelector('.comment-author');
+
+    if (!footer || !author || author.querySelector('.comment-meta-row')) return;
 
     const deleteLink = footer.querySelector('a.comment-delete');
     const replyLink = footer.querySelector('a.comment-reply');
     const timestamp = footer.querySelector('.comment-timestamp');
 
     if (!timestamp) return;
+
+    const metaRow = document.createElement('div');
+    metaRow.className = 'comment-meta-row';
+
+    const authorWrap = document.createElement('div');
+    authorWrap.className = 'comment-author-wrap';
+
+    if (author.parentNode) {
+      author.parentNode.removeChild(author);
+    }
+    authorWrap.appendChild(author);
+
+    if (timestamp.parentNode) {
+      timestamp.parentNode.removeChild(timestamp);
+    }
+    authorWrap.appendChild(timestamp);
 
     const actionsWrap = document.createElement('div');
     actionsWrap.className = 'comment-actions-inline';
@@ -111,11 +131,13 @@ function setupCommentActions() {
     }
 
     if (deleteLink) {
+      deleteLink.classList.add('comment-delete');
+
       const menuBtn = document.createElement('button');
       menuBtn.type = 'button';
       menuBtn.className = 'comment-menu-toggle';
       menuBtn.setAttribute('aria-label', 'Comment actions');
-      menuBtn.innerHTML = '⋯';
+      menuBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>';
 
       const menu = document.createElement('div');
       menu.className = 'comment-menu hidden';
@@ -131,7 +153,13 @@ function setupCommentActions() {
       actionsWrap.appendChild(menuBtn);
     }
 
-    footer.appendChild(actionsWrap);
+    metaRow.appendChild(authorWrap);
+    metaRow.appendChild(actionsWrap);
+
+    const commentBlock = footer.parentElement;
+    if (commentBlock) {
+      commentBlock.replaceChild(metaRow, footer);
+    }
   });
 }
 
@@ -143,6 +171,8 @@ function initAll() {
   initShare();
   applyLazyLoadingToComments();
   formatCommentTimestamps();
+  cleanCommentAuthorText();
+  setupCommentActions();
 }
 
 if (document.readyState === 'loading') {
