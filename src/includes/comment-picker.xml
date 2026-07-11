@@ -1,3 +1,50 @@
 <b:includable id='commentPicker' var='post'>
-  <b:include data='post' name='comments'/>
+  <section class='cm comments-shell rounded-theme border border-border bg-surface/50 p-4 md:p-6'>
+    <b:if cond='data:post.allowComments and data:view.isPost and !data:view.isPreview'>
+      <b:include data='post' name='commentTitleBar'/>
+      <b:include data='post' name='commentContentArea'/>
+    <b:else/>
+      <div class='rounded-theme border border-dashed border-border bg-bg/50 px-4 py-6 text-center text-sm text-muted'>
+        <p class='font-medium text-text-soft'>Comments are closed for this post.</p>
+      </div>
+    </b:if>
+  </section>
+</b:includable>
+
+<b:includable id='commentAvatar' var='post'>
+  <div class='comment-avatar-shell' aria-hidden='true'>
+    <div class='comment-avatar-fallback'>
+      <span>
+        <b:if cond='data:post.author.name'>
+          <data:post.author.name/>
+        <b:else/>
+          U
+        </b:if>
+      </span>
+    </div>
+  </div>
+</b:includable>
+
+<b:includable id='commentTitleBar' var='post'>
+  <div class='cmTtl comments-header mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4'>
+    <div class='cmTtlInner flex items-center gap-3'>
+      <span class='inline-flex min-w-6 items-center justify-center rounded-full border border-border bg-bg px-2.5 py-1 text-[11px] font-semibold text-muted'>
+        <data:post.numberOfComments/>
+      </span>
+    </div>
+  </div>
+</b:includable>
+
+<b:includable id='commentContentArea' var='post'>
+  <div class='cmCo comments-body'>
+    <div class='cmCn comments-list-wrapper'>
+      <b:if cond='data:post.numberOfComments > 0'>
+        <b:include data='post' name='comments'/>
+      <b:else/>
+        <div class='rounded-theme border border-dashed border-border bg-bg/40 px-4 py-6 text-center text-sm text-muted'>
+          <p class='font-medium text-text-soft'>Be the first to leave a comment.</p>
+        </div>
+      </b:if>
+    </div>
+  </div>
 </b:includable>

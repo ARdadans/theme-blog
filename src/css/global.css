@@ -211,3 +211,203 @@
   background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
   color: var(--color-primary);
 }
+
+/* Blogger comments styling */
+.comments-shell {
+  @apply text-sm text-text-soft;
+}
+
+.comments-shell .cm {
+  @apply flex flex-col gap-0;
+}
+
+.comments-shell .cmTtl {
+  @apply mb-4 border-b border-border pb-4;
+}
+
+.comments-shell .comments .title {
+  @apply mb-4 text-lg font-semibold text-text-soft;
+  text-transform: none;
+}
+
+.comments-shell .cmCo {
+  @apply flex flex-col gap-4;
+}
+
+.comments-shell .cmCn {
+  @apply flex flex-col gap-3;
+}
+
+.comments-shell .cmFrm {
+  @apply rounded-2xl border border-border/70 bg-bg/40 p-4;
+}
+
+.comments-shell #comments-block {
+  @apply flex flex-col gap-3;
+}
+
+.comments-shell .comment {
+  @apply flex gap-3 rounded-2xl border border-border/80 bg-card/70 p-4 shadow-sm;
+}
+
+.comments-shell .avatar-image-container {
+  @apply mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border/80 bg-primary/10;
+}
+
+.comments-shell .author-avatar {
+  @apply h-full w-full object-cover;
+}
+
+.comments-shell .comment-block {
+  @apply min-w-0 flex-1;
+}
+
+.comments-shell .comment-author {
+  @apply mb-2 text-sm font-semibold text-text-soft;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.comments-shell .comment-author a {
+  @apply text-text-soft hover:text-primary;
+  display: inline-flex;
+  font-weight: 600;
+}
+
+.comments-shell .comment-author a + a,
+.comments-shell .comment-author .comment-author-text {
+  @apply hidden;
+}
+
+.comments-shell .comment-author .comment-author-text {
+  @apply hidden;
+}
+
+.comments-shell .comment-body {
+  @apply rounded-xl border border-border/70 bg-bg/70 px-3.5 py-3 leading-7 text-text-soft shadow-inner;
+}
+
+.comments-shell .comment-body p {
+  @apply mb-3 last:mb-0;
+}
+
+.comments-shell .comment-footer {
+  @apply mt-3 flex items-center justify-between gap-3 text-xs text-muted;
+}
+
+.comments-shell .comment-timestamp,
+.comments-shell .comment-footer a {
+  @apply text-xs text-muted;
+}
+
+.comments-shell .comment-timestamp a:hover,
+.comments-shell .comment-footer a:hover {
+  @apply text-primary;
+}
+
+.comments-shell .comment-actions-inline {
+  @apply flex items-center gap-2;
+}
+
+.comments-shell .comment-reply {
+  @apply inline-flex items-center rounded-full border border-border bg-bg px-2.5 py-1 text-[11px] font-semibold text-muted transition-fast hover:border-primary hover:text-primary;
+}
+
+.comments-shell .comment-menu-toggle {
+  @apply inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-bg text-sm text-muted transition-fast hover:border-primary hover:text-primary;
+}
+
+.comments-shell .comment-menu {
+  @apply absolute right-0 top-full z-10 mt-2 min-w-[120px] rounded-xl border border-border bg-card p-2 shadow-lg;
+}
+
+.comments-shell .comment-menu.hidden {
+  display: none;
+}
+
+.comments-shell .comment-delete {
+  @apply inline-flex w-full items-center rounded-lg px-2 py-1.5 text-sm font-medium text-text-soft hover:bg-primary/10 hover:text-primary;
+}
+
+.comments-shell .comment-delete img {
+  @apply hidden;
+}
+
+.comments-shell .comment-form input,
+.comments-shell .comment-form textarea,
+.comments-shell .comment-replybox-thread input,
+.comments-shell .comment-replybox-thread textarea,
+.comments-shell .comment-form button,
+.comments-shell .comment-replybox-thread button {
+  @apply w-full rounded-xl border border-border bg-bg px-3 py-2.5 text-sm text-text-soft font-sans shadow-sm outline-none transition-fast;
+}
+
+.comments-shell .comment-form input:focus,
+.comments-shell .comment-form textarea:focus,
+.comments-shell .comment-replybox-thread input:focus,
+.comments-shell .comment-replybox-thread textarea:focus {
+  @apply border-primary ring-1 ring-primary/20;
+}
+
+.comments-shell .comment-form button,
+.comments-shell .comment-replybox-thread button {
+  @apply cursor-pointer bg-surface text-text hover:bg-primary/10 hover:text-primary hover:border-primary;
+}
+
+.comments-shell .comment-author:has(a) {
+  @apply text-text-soft;
+}
+
+.comments-shell .comment-author a[rel="nofollow"] {
+  @apply font-semibold;
+}
+
+.comments-shell .comment-author {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.comments-shell .comment-author a {
+  display: inline-flex;
+}
+
+.comments-shell .comment-author a[href] {
+  margin-right: 0.2rem;
+}
+
+.comments-shell .comment-author a[href]:after {
+  content: "";
+}
+
+.comments-shell .comment-body img,
+.comments-shell .comment-body iframe {
+  @apply mt-3 rounded-xl border border-border object-cover shadow-sm;
+}
+
+.comments-shell .comment-body blockquote {
+  @apply my-3 border-l-2 border-primary/60 pl-3 italic text-muted;
+}
+
+.comments-shell .comment-body pre {
+  @apply overflow-x-auto rounded-lg border border-border bg-bg px-3 py-2 text-xs text-text-soft;
+}
+
+.comments-shell .comment-body code {
+  @apply rounded bg-bg px-1.5 py-0.5 text-[12px] text-primary;
+}
+
+.comments-shell .comment-avatar-shell {
+  @apply flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border/80 bg-primary/10 text-primary shadow-sm;
+}
+
+.comments-shell .comment-avatar-fallback {
+  @apply flex h-full w-full items-center justify-center text-sm font-semibold uppercase tracking-[0.15em];
+}
+
+.comments-shell .comment-avatar-fallback span {
+  @apply block;
+}

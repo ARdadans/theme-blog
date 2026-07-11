@@ -364,8 +364,11 @@ export function initSeries(): void {
       textDiv.innerHTML = summary ? summary.innerHTML : '<span class="text-xs text-muted italic">No synopsis available.</span>';
       container.appendChild(textDiv);
 
-      const expandBlock = document.createElement('div');
-      expandBlock.className = 'expand-details-block hidden flex-col gap-3 text-xs font-sans';
+      const expandWrapper = document.createElement('div');
+      expandWrapper.className = 'grid grid-rows-[0fr] transition-all duration-350 ease-in-out overflow-hidden';
+
+      const expandInner = document.createElement('div');
+      expandInner.className = 'min-h-0 flex flex-col gap-3 pt-2 text-xs font-sans';
 
       let expandBlockInner = '';
       if (metaRowsHtml) {
@@ -374,8 +377,9 @@ export function initSeries(): void {
       if (mobileGenresHtml || mobileTagsHtml) {
         expandBlockInner += `<div class="flex md:hidden flex-col gap-3 pt-3">${mobileGenresHtml}${mobileTagsHtml}</div>`;
       }
-      expandBlock.innerHTML = expandBlockInner;
-      container.appendChild(expandBlock);
+      expandInner.innerHTML = expandBlockInner;
+      expandWrapper.appendChild(expandInner);
+      container.appendChild(expandWrapper);
 
       const toggleLink = document.createElement('a');
       toggleLink.className = 'text-primary text-xs font-bold hover:underline cursor-pointer inline-block mt-1 transition-fast';
@@ -385,13 +389,13 @@ export function initSeries(): void {
         e.preventDefault();
         if (textDiv.classList.contains('line-clamp-3')) {
           textDiv.classList.remove('line-clamp-3');
-          expandBlock.classList.remove('hidden');
-          expandBlock.classList.add('flex');
+          expandWrapper.classList.remove('grid-rows-[0fr]');
+          expandWrapper.classList.add('grid-rows-[1fr]');
           toggleLink.textContent = 'View less';
         } else {
           textDiv.classList.add('line-clamp-3');
-          expandBlock.classList.remove('flex');
-          expandBlock.classList.add('hidden');
+          expandWrapper.classList.remove('grid-rows-[1fr]');
+          expandWrapper.classList.add('grid-rows-[0fr]');
           toggleLink.textContent = 'View more';
         }
       });
