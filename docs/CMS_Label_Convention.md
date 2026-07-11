@@ -18,13 +18,17 @@ prefix:value
 - Ganti spasi dengan tanda `-`.
 - Aturan ini berlaku untuk semua value label di konvensi CMS.
 
-Contoh:
+#### Contoh Normalisasi:
 
-```text
-tag:shadow-army
-series:the-reluctant-dictator
-author:masashi-kishimoto
-```
+| Original Text | Label Format |
+| :--- | :--- |
+| Shadow Army | `tag:shadow-army` |
+| The Reluctant Dictator | `series:the-reluctant-dictator` |
+| Masashi Kishimoto | `author:masashi-kishimoto` |
+| Red Ice Studio | `artist:red-ice-studio` |
+| Shonen Jump | `publisher:shonen-jump` |
+| South Korea | `country:south-korea` |
+| Web Novel | `media:web-novel` |
 
 ### Struktur Label
 
@@ -82,11 +86,24 @@ badge:new
 
 Saat membuat link ke label dari halaman Series, selalu tambahkan filter `label:"type:series"` supaya chapter dan posting lain tidak ikut terambil.
 
-```text
-Novel: /search?q=label:"media:novel"+label:"type:series"
-Action: /search?q=label:"genre:action"+label:"type:series"
-Shadow Army: /search?q=label:"tag:shadow-army"+label:"type:series"
+#### Format Link Pencarian:
 ```
+/search?q=label:"<prefix>:<value>"+label:"type:series"
+```
+
+#### Contoh Lengkap:
+| Kategori | Link |
+| :--- | :--- |
+| Media (Novel) | `/search?q=label:"media:novel"+label:"type:series"` |
+| Genre (Action) | `/search?q=label:"genre:action"+label:"type:series"` |
+| Tag (Shadow Army) | `/search?q=label:"tag:shadow-army"+label:"type:series"` |
+| Author | `/search?q=label:"author:masashi-kishimoto"+label:"type:series"` |
+| Artist | `/search?q=label:"artist:red-ice-studio"+label:"type:series"` |
+| Publisher | `/search?q=label:"publisher:shonen-jump"+label:"type:series"` |
+| Country | `/search?q=label:"country:south-korea"+label:"type:series"` |
+| Language | `/search?q=label:"language:korean"+label:"type:series"` |
+| Status | `/search?q=label:"status:ongoing"+label:"type:series"` |
+| Year | `/search?q=label:"year:2024"+label:"type:series"` |
 
 ---
 

@@ -26,6 +26,34 @@ function getRelativeTime(isoString: string): string {
   }
 }
 
+/**
+ * Extracts label prefix and value from a label string (e.g., "genre:action" -> {prefix: "genre", value: "action"})
+ */
+function parseLabelString(labelStr: string): { prefix: string; value: string } | null {
+  const match = labelStr.match(/^([^:]+):(.+)$/);
+  if (match) {
+    return { prefix: match[1].toLowerCase().trim(), value: match[2].toLowerCase().trim() };
+  }
+  return null;
+}
+
+/**
+ * Normalizes label values so spaces become hyphens and casing is lower-case.
+ */
+function normalizeLabelValue(value: string): string {
+  return value.trim().toLowerCase().replace(/\s+/g, '-');
+}
+
+/**
+ * Generates a search URL with label filter and type:series filter.
+ * Example: "genre:action" -> "/search?q=label:"genre:action"+label:"type:series""
+ */
+function generateSearchLink(labelPrefix: string, labelValue: string): string {
+  const normalizedValue = normalizeLabelValue(labelValue);
+  const encodedQuery = encodeURIComponent(`label:"${labelPrefix}:${normalizedValue}"+label:"type:series"`);
+  return `/search?q=${encodedQuery}`;
+}
+
 export function initSeries(): void {
   const seriesContainer = document.querySelector('.series-profile-container');
   if (!seriesContainer) return;
@@ -125,21 +153,42 @@ export function initSeries(): void {
     const badgeClasses = ['.media', '.status', '.year', '.badge', '.latest-chapter'];
     badgeClasses.forEach(cls => {
       const el = metaContainer.querySelector(cls) as HTMLElement | null;
-      if (el) {
-        if (cls === '.badge' || cls === '.latest-chapter') {
-          el.style.display = 'none';
+      if (!el) return;
+
+      if (cls === '.badge' || cls === '.latest-chapter') {
+        el.style.display = 'none';
+      }
+
+      let extraStyles = 'bg-surface border border-border text-muted px-2.5 py-1 rounded font-bold uppercase tracking-wider text-[10px]';
+      const text = el.textContent?.toLowerCase().trim() || '';
+      if (cls === '.status') {
+        if (text.includes('ongoing') || text.includes('releasing') || text.includes('publish') || text.includes('aktif')) {
+          extraStyles = 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded font-bold uppercase tracking-wider text-[10px]';
+        } else {
+          extraStyles = 'bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2.5 py-1 rounded font-bold uppercase tracking-wider text-[10px]';
         }
-        let extraStyles = 'bg-surface border border-border text-muted px-2.5 py-1 rounded font-bold uppercase tracking-wider text-[10px]';
-        const text = el.textContent?.toLowerCase().trim() || '';
-        if (cls === '.status') {
-          if (text.includes('ongoing') || text.includes('releasing') || text.includes('publish') || text.includes('aktif')) {
-            extraStyles = 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded font-bold uppercase tracking-wider text-[10px]';
-          } else {
-            extraStyles = 'bg-amber-500/10 border border-amber-500/20 text-amber-400 px-2.5 py-1 rounded font-bold uppercase tracking-wider text-[10px]';
-          }
-        } else if (cls === '.badge') {
-          extraStyles = 'bg-primary/10 border border-primary/20 text-primary px-2.5 py-1 rounded font-bold uppercase tracking-wider text-[10px]';
+      } else if (cls === '.badge') {
+        extraStyles = 'bg-primary/10 border border-primary/20 text-primary px-2.5 py-1 rounded font-bold uppercase tracking-wider text-[10px]';
+      }
+
+      if (cls === '.media' || cls === '.status' || cls === '.year') {
+        const badgeText = el.textContent?.trim() || '';
+        const badgeValue = badgeText.toLowerCase().trim();
+        let href = '';
+        if (cls === '.media') {
+          href = generateSearchLink('media', badgeValue);
+        } else if (cls === '.status') {
+          href = generateSearchLink('status', badgeValue);
+        } else if (cls === '.year') {
+          href = generateSearchLink('year', badgeValue);
         }
+
+        const badgeLink = document.createElement('a');
+        badgeLink.href = href;
+        badgeLink.className = extraStyles;
+        badgeLink.textContent = badgeText;
+        badgesPlaceholder.appendChild(badgeLink);
+      } else {
         el.className = extraStyles;
         badgesPlaceholder.appendChild(el);
       }
@@ -148,7 +197,7 @@ export function initSeries(): void {
 
   // Helper to limit desktop genres/tags to 5 items and add a "More" button
   const setupDesktopItemLimit = (placeholder: HTMLElement, listEl: HTMLElement, limit: number = 5) => {
-    const items = Array.from(listEl.querySelectorAll('li'));
+    const items = Array.from(listEl.children).filter((child): child is HTMLElement => child instanceof HTMLElement);
 
     const containerDiv = document.createElement('div');
     containerDiv.className = 'flex items-center gap-1.5 flex-wrap min-w-0 w-full';
@@ -156,9 +205,7 @@ export function initSeries(): void {
 
     if (items.length > limit) {
       items.forEach((item, index) => {
-        if (index >= limit) {
-          item.classList.add('hidden');
-        }
+        item.classList.toggle('hidden', index >= limit);
       });
 
       const moreBtn = document.createElement('button');
@@ -187,8 +234,13 @@ export function initSeries(): void {
     if (genresList) {
       const genresListClone = genresList.cloneNode(true) as HTMLElement;
       genresListClone.className = 'flex flex-wrap gap-1.5 list-none p-0 m-0';
-      genresListClone.querySelectorAll('li').forEach(li => {
-        li.className = 'bg-surface border border-border text-muted hover:border-transparent hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1 rounded-full transition-fast cursor-pointer';
+      genresListClone.querySelectorAll('li').forEach((li) => {
+        const genreText = li.textContent?.trim() || '';
+        const link = document.createElement('a');
+        link.href = generateSearchLink('genre', genreText);
+        link.className = 'bg-surface border border-border text-muted hover:border-transparent hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1 rounded-full transition-fast cursor-pointer';
+        link.textContent = genreText;
+        li.replaceWith(link);
       });
       setupDesktopItemLimit(genresPlaceholder, genresListClone);
     }
@@ -197,8 +249,13 @@ export function initSeries(): void {
     if (tagsList) {
       const tagsListClone = tagsList.cloneNode(true) as HTMLElement;
       tagsListClone.className = 'flex flex-wrap gap-1.5 list-none p-0 m-0';
-      tagsListClone.querySelectorAll('li').forEach(li => {
-        li.className = 'bg-surface border border-border text-muted hover:border-transparent hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1 rounded-full transition-fast cursor-pointer';
+      tagsListClone.querySelectorAll('li').forEach((li) => {
+        const tagText = li.textContent?.trim() || '';
+        const link = document.createElement('a');
+        link.href = generateSearchLink('tag', tagText);
+        link.className = 'bg-surface border border-border text-muted hover:border-transparent hover:bg-primary/10 hover:text-primary text-[11px] font-semibold px-2.5 py-1 rounded-full transition-fast cursor-pointer';
+        link.textContent = tagText;
+        li.replaceWith(link);
       });
       setupDesktopItemLimit(genresPlaceholder, tagsListClone);
     }
@@ -227,13 +284,21 @@ export function initSeries(): void {
     if (authorName) {
       const authorDiv = document.createElement('div');
       authorDiv.className = 'flex items-center gap-1.5 text-text-soft font-sans';
-      authorDiv.innerHTML = `<span class="font-semibold text-text-soft">Author:</span><span class="text-muted font-medium flex items-center gap-1.5 flex-wrap">${authorName}</span>`;
+      const authorLinks = authorName.split(',').map(author => {
+        const cleanAuthor = author.trim();
+        return `<a href="${generateSearchLink('author', cleanAuthor)}" class="text-muted hover:text-primary font-medium transition-fast">${cleanAuthor}</a>`;
+      }).join(', ');
+      authorDiv.innerHTML = `<span class="font-semibold text-text-soft">Author:</span><span class="text-muted font-medium flex items-center gap-1.5 flex-wrap">${authorLinks}</span>`;
       authorArtPlaceholder.appendChild(authorDiv);
     }
     if (artistName) {
       const artistDiv = document.createElement('div');
       artistDiv.className = 'flex items-center gap-1.5 text-text-soft font-sans';
-      artistDiv.innerHTML = `<span class="font-semibold text-text-soft">Art:</span><span class="text-muted font-medium flex items-center gap-1.5 flex-wrap">${artistName}</span>`;
+      const artistLinks = artistName.split(',').map(artist => {
+        const cleanArtist = artist.trim();
+        return `<a href="${generateSearchLink('artist', cleanArtist)}" class="text-muted hover:text-primary font-medium transition-fast">${cleanArtist}</a>`;
+      }).join(', ');
+      artistDiv.innerHTML = `<span class="font-semibold text-text-soft">Art:</span><span class="text-muted font-medium flex items-center gap-1.5 flex-wrap">${artistLinks}</span>`;
       authorArtPlaceholder.appendChild(artistDiv);
     }
   }
@@ -247,13 +312,25 @@ export function initSeries(): void {
     // Build Publisher, Country, Language rows HTML
     let metaRowsHtml = '';
     if (publisherName) {
-      metaRowsHtml += `<div class="flex items-center gap-1.5"><span class="font-semibold text-text-soft">Publisher:</span><span class="text-muted font-medium flex items-center gap-1.5 flex-wrap">${publisherName}</span></div>`;
+      const publisherLinks = publisherName.split(',').map(pub => {
+        const cleanPub = pub.trim();
+        return `<a href="${generateSearchLink('publisher', cleanPub)}" class="text-muted hover:text-primary font-medium transition-fast">${cleanPub}</a>`;
+      }).join(', ');
+      metaRowsHtml += `<div class="flex items-center gap-1.5"><span class="font-semibold text-text-soft">Publisher:</span><span class="text-muted font-medium flex items-center gap-1.5 flex-wrap">${publisherLinks}</span></div>`;
     }
     if (countryName) {
-      metaRowsHtml += `<div class="flex items-center gap-1.5"><span class="font-semibold text-text-soft">Country:</span><span class="text-muted font-medium flex items-center gap-1.5 flex-wrap">${countryName}</span></div>`;
+      const countryLinks = countryName.split(',').map(country => {
+        const cleanCountry = country.trim();
+        return `<a href="${generateSearchLink('country', cleanCountry)}" class="text-muted hover:text-primary font-medium transition-fast">${cleanCountry}</a>`;
+      }).join(', ');
+      metaRowsHtml += `<div class="flex items-center gap-1.5"><span class="font-semibold text-text-soft">Country:</span><span class="text-muted font-medium flex items-center gap-1.5 flex-wrap">${countryLinks}</span></div>`;
     }
     if (languageName) {
-      metaRowsHtml += `<div class="flex items-center gap-1.5"><span class="font-semibold text-text-soft">Language:</span><span class="text-muted font-medium flex items-center gap-1.5 flex-wrap">${languageName}</span></div>`;
+      const languageLinks = languageName.split(',').map(lang => {
+        const cleanLang = lang.trim();
+        return `<a href="${generateSearchLink('language', cleanLang)}" class="text-muted hover:text-primary font-medium transition-fast">${cleanLang}</a>`;
+      }).join(', ');
+      metaRowsHtml += `<div class="flex items-center gap-1.5"><span class="font-semibold text-text-soft">Language:</span><span class="text-muted font-medium flex items-center gap-1.5 flex-wrap">${languageLinks}</span></div>`;
     }
 
     // Build mobile genres/tags HTML
@@ -264,7 +341,7 @@ export function initSeries(): void {
     if (genresListRaw) {
       const genres = Array.from(genresListRaw.querySelectorAll('li')).map(li => li.innerHTML.trim()).filter(Boolean);
       if (genres.length > 0) {
-        mobileGenresHtml = `<div class="flex flex-col gap-1.5"><span class="font-semibold text-text-soft">Genres:</span><div class="flex flex-wrap gap-1.5">${genres.map(g => `<span class="bg-surface border border-border text-muted text-[11px] font-semibold px-2.5 py-1 rounded-full transition-fast hover:border-transparent hover:bg-primary/10 hover:text-primary cursor-pointer">${g}</span>`).join('')}</div></div>`;
+        mobileGenresHtml = `<div class="flex flex-col gap-1.5"><span class="font-semibold text-text-soft">Genres:</span><div class="flex flex-wrap gap-1.5">${genres.map(g => `<a href="${generateSearchLink('genre', g)}" class="bg-surface border border-border text-muted text-[11px] font-semibold px-2.5 py-1 rounded-full transition-fast hover:border-transparent hover:bg-primary/10 hover:text-primary cursor-pointer">${g}</a>`).join('')}</div></div>`;
       }
     }
 
@@ -272,7 +349,7 @@ export function initSeries(): void {
     if (tagsListRaw) {
       const tags = Array.from(tagsListRaw.querySelectorAll('li')).map(li => li.innerHTML.trim()).filter(Boolean);
       if (tags.length > 0) {
-        mobileTagsHtml = `<div class="flex flex-col gap-1.5"><span class="font-semibold text-text-soft">Tags:</span><div class="flex flex-wrap gap-1.5">${tags.map(t => `<span class="bg-surface border border-border text-muted text-[11px] font-semibold px-2.5 py-1 rounded-full transition-fast hover:border-transparent hover:bg-primary/10 hover:text-primary cursor-pointer">${t}</span>`).join('')}</div></div>`;
+        mobileTagsHtml = `<div class="flex flex-col gap-1.5"><span class="font-semibold text-text-soft">Tags:</span><div class="flex flex-wrap gap-1.5">${tags.map(t => `<a href="${generateSearchLink('tag', t)}" class="bg-surface border border-border text-muted text-[11px] font-semibold px-2.5 py-1 rounded-full transition-fast hover:border-transparent hover:bg-primary/10 hover:text-primary cursor-pointer">${t}</a>`).join('')}</div></div>`;
       }
     }
 
